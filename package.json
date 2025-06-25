@@ -1,0 +1,53 @@
+{
+  "name": "prix-signals",
+  "version": "1.0.0",
+  "description": "Premium crypto signal bot with low cap coin monitoring and premium features",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "lint": "eslint . --ext .ts",
+    "test": "jest",
+    "env:example": "node scripts/generateEnvExample.js",
+    "env:check": "node scripts/checkEnv.js",
+    "signals:start": "node scripts/run-signals-bot.js start",
+    "signals:stop": "node scripts/run-signals-bot.js stop",
+    "signals:analytics": "node scripts/run-signals-bot.js analytics",
+    "signals:history": "node scripts/run-signals-bot.js history",
+    "user:add": "node scripts/add-test-user.js",
+    "user:list": "node scripts/list-users.js",
+    "user:upgrade": "node scripts/upgrade-user.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.90.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.11.0",
+    "@types/stripe": "^8.0.416",
+    "async-sema": "^3.1.1",
+    "axios": "^1.6.2",
+    "crypto-bot-api": "^0.3.5",
+    "date-fns": "^3.3.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "grammy": "^1.21.1",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.3",
+    "postgres": "^3.4.7",
+    "stripe": "^14.5.0",
+    "telegraf": "^4.15.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.10",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.2"
+  }
+}

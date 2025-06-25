@@ -1,0 +1,63 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: trading-bot
+    ports:
+      - "3001:3001"
+    environment:
+      - SUPABASE_URL=https://conwhnwctdkaxjgtsizy.supabase.co
+      - SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvbndobndjdGRrYXhqZ3RzaXp5Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTkzMDcyMiwiZXhwIjoyMDY1NTA2NzIyfQ.v42Ibu-w9BDnZ8Bw-pNzIfh7mn0pICblY1TpJCYRYL8
+      - SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNvbndobndjdGRrYXhqZ3RzaXp5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5MzA3MjIsImV4cCI6MjA2NTUwNjcyMn0.rQrxSQELvEUbZF8lnHXVIncjovIjeTZQQYnUBvvQKOg
+      - TELEGRAM_BOT_TOKEN=7131833918:AAH57nyovtZ5rpE0ZwyxOd0zDeCjMcniS6w
+      - CRYPTOBOT_API_TOKEN=414873:AA8SgUHBf1qvkjRCO1MV0b1qVQSv9Ts0qzw
+      - SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
+      - FREEMIUM_DAILY_LIMIT=5
+      - SIGNAL_DELAY_MINUTES=15
+      - SIGNAL_CHANNELS=channel1,channel2,channel3
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
+    #   - ./logs:/app/logs
+    depends_on:
+      supabase-db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - trading-network
+
+  supabase-db:
+    image: supabase/postgres:15.1.0.117
+    container_name: trading-bot-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+    volumes:
+      - ./supabase/migrations:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - trading-network
+
+networks:
+  trading-network:
+    driver: bridge
+
+volumes:
+  postgres-data: 
